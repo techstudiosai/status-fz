@@ -35,7 +35,8 @@
 
   .card {
     text-align: center;
-    padding: 4rem 5rem;
+    width: min(92vw, 640px);
+    padding: clamp(2rem, 8vw, 4rem) clamp(1.25rem, 6vw, 5rem);
     border: 1px solid rgba(0, 255, 200, 0.15);
     border-radius: 4px;
     background: rgba(10, 15, 20, 0.6);
@@ -57,11 +58,12 @@
   .card::after  { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
 
   .label {
-    font-size: 0.75rem;
-    letter-spacing: 0.5em;
+    font-size: clamp(0.6rem, 2.4vw, 0.75rem);
+    letter-spacing: clamp(0.2em, 1.5vw, 0.5em);
     text-transform: uppercase;
     color: rgba(0, 255, 200, 0.6);
-    margin-bottom: 2rem;
+    margin-bottom: clamp(1.25rem, 5vw, 2rem);
+    white-space: nowrap;
   }
 
   .dias {
@@ -77,7 +79,7 @@
   }
 
   .texto {
-    margin-top: 2rem;
+    margin-top: clamp(1.25rem, 5vw, 2rem);
     font-size: clamp(1rem, 2.5vw, 1.4rem);
     font-weight: 300;
     letter-spacing: 0.08em;
@@ -90,7 +92,7 @@
   }
 
   .statusline {
-    margin-top: 2.5rem;
+    margin-top: clamp(1.5rem, 6vw, 2.5rem);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -127,28 +129,28 @@
 
   .toast {
     position: fixed;
-    top: 2rem;
-    right: 2rem;
+    top: 0;
+    left: 0;
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    padding: 1rem 1.4rem;
+    width: max-content;
+    max-width: min(70vw, 320px);
+    padding: clamp(0.7rem, 2.5vw, 1rem) clamp(0.9rem, 3vw, 1.4rem);
     border: 1px solid rgba(255, 80, 120, 0.4);
     border-left: 3px solid #ff5078;
     border-radius: 4px;
     background: rgba(20, 8, 12, 0.85);
     backdrop-filter: blur(6px);
     box-shadow: 0 0 24px rgba(255, 80, 120, 0.15);
-    font-size: 0.9rem;
+    font-size: clamp(0.75rem, 2.5vw, 0.9rem);
     letter-spacing: 0.06em;
-    opacity: 0;
-    transform: translateX(30px);
-    animation: toastIn 0.5s ease 1s forwards, toastOut 0.5s ease 6s forwards;
+    animation: fadeIn 1s ease both, wander 120s ease-in-out infinite;
     z-index: 10;
   }
 
   .toast .tag {
-    font-size: 0.6rem;
+    font-size: clamp(0.5rem, 1.8vw, 0.6rem);
     letter-spacing: 0.3em;
     text-transform: uppercase;
     color: #ff5078;
@@ -157,14 +159,17 @@
 
   .toast p { color: rgba(255, 230, 236, 0.95); }
 
-  @keyframes toastIn {
-    from { opacity: 0; transform: translateX(30px); }
-    to   { opacity: 1; transform: translateX(0); }
-  }
-
-  @keyframes toastOut {
-    from { opacity: 1; transform: translateX(0); }
-    to   { opacity: 0; transform: translateX(30px); visibility: hidden; }
+  /* deriva lenta: x fica entre 3vw e 28vw (folga p/ a largura máx. de 70vw) */
+  @keyframes wander {
+    0%   { transform: translate(3vw,  4vh); }
+    12%  { transform: translate(24vw, 12vh); }
+    25%  { transform: translate(10vw, 34vh); }
+    38%  { transform: translate(28vw, 55vh); }
+    50%  { transform: translate(6vw,  78vh); }
+    62%  { transform: translate(22vw, 62vh); }
+    75%  { transform: translate(28vw, 30vh); }
+    88%  { transform: translate(12vw, 14vh); }
+    100% { transform: translate(3vw,  4vh); }
   }
 </style>
 </head>
