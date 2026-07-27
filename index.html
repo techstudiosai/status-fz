@@ -93,6 +93,28 @@
     font-weight: 500;
   }
 
+  /* ---- recorde ---- */
+  .recorde {
+    margin-top: clamp(1rem, 4vw, 1.5rem);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(255, 200, 80, 0.35);
+    border-radius: 999px;
+    background: rgba(255, 200, 80, 0.06);
+    font-size: clamp(0.7rem, 2.2vw, 0.8rem);
+    letter-spacing: 0.12em;
+    color: rgba(255, 215, 130, 0.9);
+    text-transform: uppercase;
+  }
+
+  .recorde strong {
+    color: #ffc94d;
+    font-weight: 600;
+    text-shadow: 0 0 12px rgba(255, 200, 80, 0.4);
+  }
+
   /* ---- registro dos últimos surtos ---- */
   .surtos {
     margin-top: clamp(1.5rem, 6vw, 2.5rem);
@@ -227,6 +249,8 @@
     <div class="dias" id="dias">–</div>
     <p class="texto" id="texto">Estamos a <strong>… dias</strong> sem ninguém surtar no time FZ</p>
 
+    <div class="recorde" id="recorde">🏆 Recorde: <strong>…</strong></div>
+
     <section class="surtos">
       <div class="surtos-header">Registro // Últimos 5 surtados</div>
       <ol id="lista-surtos"></ol>
@@ -293,6 +317,31 @@
     document.getElementById('dias').textContent = dias;
     document.getElementById('texto').innerHTML =
       `Estamos a <strong>${dias} ${plural}</strong> sem ninguém surtar no time FZ`;
+
+    // =====================================================================
+    // RECORDE — maior tempo sem alguém surtar. Calculado sozinho:
+    // pega o maior intervalo entre surtos registrados no array SURTOS e
+    // compara com a sequência atual (se ela for maior ou igual, o recorde
+    // está "em andamento" agora).
+    //
+    // Se o time tinha um recorde histórico ANTERIOR ao primeiro registro
+    // do array, informe em dias na constante abaixo (ex.: 14). Deixe null
+    // pra considerar só o que está registrado.
+    // =====================================================================
+    const RECORDE_HISTORICO = null;
+
+    const ordenados = SURTOS.slice().sort((a, b) => parseData(a.data) - parseData(b.data));
+    let recorde = RECORDE_HISTORICO ?? 0;
+    for (let i = 1; i < ordenados.length; i++) {
+      const gap = Math.round((parseData(ordenados[i].data) - parseData(ordenados[i - 1].data)) / 86400000);
+      if (gap > recorde) recorde = gap;
+    }
+    const emAndamento = dias >= recorde;
+    if (emAndamento) recorde = dias;
+
+    document.getElementById('recorde').innerHTML =
+      `🏆 Recorde: <strong>${recorde} ${recorde === 1 ? 'dia' : 'dias'}</strong> sem surto` +
+      (emAndamento ? ' · em andamento 🔥' : '');
   </script>
 </body>
 </html>
